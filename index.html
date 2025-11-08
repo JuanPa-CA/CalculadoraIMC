@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de IMC</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #74b9ff, #a29bfe);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      background-color: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      padding: 40px;
+      max-width: 1000px;
+      width: 100%;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2d3436;
+      margin-bottom: 20px;
+    }
+
+    .form-box {
+      display: flex;
+      flex-direction: column;
+      background-color: #f8faff;
+      border-radius: 15px;
+      padding: 30px;
+      border: 2px solid #74b9ff;
+      transition: 0.3s;
+    }
+
+    .form-box:hover {
+      box-shadow: 0 5px 20px rgba(116, 185, 255, 0.4);
+      transform: translateY(-3px);
+    }
+
+    label {
+      margin-bottom: 5px;
+      color: #2d3436;
+      font-weight: 600;
+    }
+
+    input {
+      margin-bottom: 20px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #b2bec3;
+      font-size: 16px;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    input:focus {
+      border-color: #0984e3;
+      box-shadow: 0 0 5px rgba(9, 132, 227, 0.4);
+    }
+
+    button {
+      background-color: #0984e3;
+      color: white;
+      font-weight: 600;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #74b9ff;
+      transform: scale(1.05);
+    }
+
+    #res {
+      text-align: center;
+      margin-top: 20px;
+      color: #2d3436;
+    }
+
+    #msj {
+      text-align: center;
+      margin-top: 10px;
+      font-weight: 600;
+    }
+
+    #imagen {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      object-fit: cover;
+    }
+
+    .img-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #dfe6e9;
+      border-radius: 15px;
+      padding: 20px;
+    }
+
+    /* Responsivo */
+    @media (max-width: 800px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+
+      #imagen {
+        max-width: 300px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div>
+      <h1>Calcular IMC</h1>
+      <div class="form-box">
+        <label for="peso">Digite el peso en kg</label>
+        <input type="number" id="peso" placeholder="Ejemplo: 70">
+
+        <label for="estatura">Digite la estatura en metros</label>
+        <input type="number" id="estatura" step="0.01" placeholder="Ejemplo: 1.75">
+
+        <button onclick="calcular()">Calcular</button>
+        <h2 id="res">Resultado</h2>
+        <h3 id="msj"></h3>
+      </div>
+    </div>
+
+    <div class="img-box">
+      <img id="imagen" alt="Imagen IMC">
+    </div>
+  </div>
+
+  <script>
+    let peso = document.getElementById("peso");
+    let estatura = document.getElementById("estatura");
+    let mensaje = document.getElementById("msj");
+    let imagen = document.getElementById("imagen");
+
+    function calcular() {
+      const ValorPeso = parseFloat(peso.value);
+      const ValorEstatura = parseFloat(estatura.value);
+
+      if (ValorPeso <= 0 || ValorEstatura <= 0 || isNaN(ValorPeso) || isNaN(ValorEstatura)) {
+        let m = "El peso y la estatura deben ser valores positivos mayores a 0.";
+        mensaje.style.color = "red";
+        mensaje.textContent = m;
+        imagen.src = "https://cdn-icons-png.flaticon.com/512/463/463612.png";
+        return;
+      }
+
+      let r = ValorPeso / Math.pow(ValorEstatura, 2);
+      let m = "";
+
+      if (r <= 18.5) {
+        m = "Bajo peso";
+        mensaje.style.color = "orange";
+        imagen.src = "./bajo.jpg";
+      } else if (r > 18.5 && r < 24.9) {
+        m = "Peso normal";
+        mensaje.style.color = "green";
+        imagen.src = "./normal.webp";
+      } else if (r > 25 && r < 29.9) {
+        m = "Sobrepeso";
+        mensaje.style.color = "#ff8800";
+        imagen.src = "./sobrepeso.jpg";
+      } else {
+        m = "Obesidad";
+        mensaje.style.color = "red";
+        imagen.src = "./obeso.jpg";
+      }
+
+      mensaje.textContent = `El estado es: ${m}`;
+      document.getElementById("res").textContent = `Tu IMC es: ${r.toFixed(2)}`;
+    }
+  </script>
+</body>
+</html>
